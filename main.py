@@ -1,9 +1,7 @@
 from datetime import date, timedelta, datetime
 
-import httpx
 import telebot
 import sqlite3
-import asyncio
 
 from openai import OpenAI
 from telebot import types
@@ -13,8 +11,7 @@ from utilities import add_user_to_table, add_pill_to_table
 
 
 client = OpenAI(
-    api_key="",
-    timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
+    api_key="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",
 )
 
 bot_client = telebot.TeleBot(token='6895428130:AAG4i9ZgakJzn048GOYFKNjwVUYjg9f2n_c')
@@ -60,6 +57,7 @@ def handle_callback_query(call: CallbackQuery):
         duration = 60
     elif call.data == '1year':
         duration = 365
+
     else:
         duration = 0
 
@@ -141,9 +139,9 @@ def get_data_section(message: Message):
                         f"Медикамент: {row[1]}\n" \
                         f"Время выпивания: {row[2]}\n" \
                         f"Конечный период: {row[3]}\n" \
-                        f"Какое-то поле: {row[4]}\n" \
-                        f"Еще одно поле: {row[5]}\n" \
-                        f"Дата: {row[6]}\n" \
+                        f"ID: {row[4]}\n" \
+                        f"Интервал: {row[5]}\n" \
+                        f"Дата следующего приёма: {row[6]}\n" \
                         f"{'-' * 20}\n"
 
         bot_client.send_message(message.chat.id, response)
@@ -241,16 +239,14 @@ def start(message: Message):
 
     # create burger menu
     markup = types.ReplyKeyboardMarkup()
-    item1 = types.KeyboardButton('Задать вопрос по таблетке ⁉️')
     item2 = types.KeyboardButton('Создать цикл таблеток 🔗💊')
 
-    markup.add(item1, item2)
+    markup.add(item2)
 
     bot_client.send_message(chat_id=message.chat.id,
-                            text='Добро 😘 пожаловать этот чат бот служит помощником по приему лекарств. С нами вы '
-                                 'будете как Конь!!! 💖🤠')
+                            text='Добро 😘 пожаловать этот чат бот служит помощником по приему лекарств 💖🤠')
     bot_client.send_message(chat_id=message.chat.id,
-                            text='Ну давайте начнем сначало заполните свой календарь приёмов. Он находится здесь 👇',
+                            text='Ну давайте начнем сначало заполните свой календарь приёмов. Он находится ниже 👇',
                             reply_markup=markup)
     print(user_id)
 
@@ -264,7 +260,7 @@ def handle_start(message: Message):
 
 def get_gpt_response(message: Message):
     bot_client.send_message(message.chat.id, 'Ответ в обработке, пожайлуста подождите 🙏☺️')
-    response = client.with_options(timeout=5 * 1000).chat.completions.create(
+    response = client.chat.completions.create(
         messages=[
             {
                 "role": "user",
@@ -274,7 +270,6 @@ def get_gpt_response(message: Message):
         model="gpt-3.5-turbo",
     )
 
-    # Вывести ответ и отправить пользователю
     bot_client.reply_to(message, f'Спасибо за вопрос вот ваш ответ 🤝\n' + response.choices[0].message.content)
 
 
