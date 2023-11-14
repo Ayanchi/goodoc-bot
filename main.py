@@ -13,7 +13,7 @@ from utilities import add_user_to_table, add_pill_to_table
 
 
 client = OpenAI(
-    api_key="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",
+    api_key="",
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
@@ -257,6 +257,7 @@ def start(message: Message):
 
 @bot_client.message_handler(commands=['gpt'])
 def handle_start(message: Message):
+    print('Запущен бот')
     bot_client.send_message(message.chat.id, "Привет! Я бот. Отправь мне текст, и я передам его ChatGPT.")
     bot_client.register_next_step_handler(message, get_gpt_response)
 

@@ -1,0 +1,15 @@
+/usr/bin/env: ‘python3\r’: No such file or directory
+/usr/bin/env: ‘python3\r’: No such file or directory
+/usr/bin/env: ‘python3\r’: No such file or directory
+An error occurred: no such table: pill
+An error occurred: no such table: pill
+/usr/bin/env: ‘python3\r’: No such file or directory
+/usr/bin/env: ‘python3\r’: No such file or directory
+/usr/bin/env: ‘python3\r’: No such file or directory
+/usr/bin/env: ‘python3\r’: No such file or directory
+/usr/bin/env: ‘python3\r’: No such file or directory
+/usr/bin/env: ‘python3\r’: No such file or directory
+  File "/var/www/telegrambot/minute.py", line 42
+    message_text = f'Уже {current_time} время принять {result[1]} 😊💊,\nCледующий день принятия 🤩 {new_date.strftime('%Y-%m-%d')}'
+                                                                                                                                                                 ^
+SyntaxError: f-string: unmatched '('
